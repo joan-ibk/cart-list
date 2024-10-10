@@ -35,7 +35,8 @@ export default {
   data() {
     return {
       cartItems: [],
-      addedItemToCart:false,
+      addedItemToCart: false,
+      quantity: 1,
       products: [
         {
           id: 1, // Add an id for better key management
@@ -48,6 +49,7 @@ export default {
           name: "Waffle with Berries",
           category: "Waffle",
           price: 6.5,
+          quantity: 1,
         },
         {
           id: 2,
@@ -60,6 +62,7 @@ export default {
           name: "Vanilla Bean Crème Brûlée",
           category: "Crème Brûlée",
           price: 7.0,
+          quantity: 1,
         },
         {
           id: 3,
@@ -72,6 +75,7 @@ export default {
           name: "Macaron Mix of Five",
           category: "Macaron",
           price: 8.0,
+          quantity: 1,
         },
         {
           id: 4,
@@ -84,6 +88,7 @@ export default {
           name: "Classic Tiramisu",
           category: "Tiramisu",
           price: 5.5,
+          quantity: 1,
         },
         {
           id: 5,
@@ -96,6 +101,7 @@ export default {
           name: "Pistachio Baklava",
           category: "Baklava",
           price: 4.0,
+          quantity: 1,
         },
         {
           id: 6,
@@ -108,6 +114,7 @@ export default {
           name: "Lemon Meringue Pie",
           category: "Pie",
           price: 5.0,
+          quantity: 1,
         },
         {
           id: 7,
@@ -120,6 +127,7 @@ export default {
           name: "Red Velvet Cake",
           category: "Cake",
           price: 4.5,
+          quantity: 1,
         },
         {
           id: 8,
@@ -132,6 +140,7 @@ export default {
           name: "Salted Caramel Brownie",
           category: "Brownie",
           price: 4.5,
+          quantity: 1,
         },
         {
           id: 9,
@@ -144,6 +153,7 @@ export default {
           name: "Vanilla Panna Cotta",
           category: "Panna Cotta",
           price: 6.5,
+          quantity: 1,
         },
       ],
     };
@@ -163,10 +173,18 @@ export default {
     },
     // Method to remove a product from the cart
     removeFromCart(index) {
-      
-        this.cartItems.splice(index, 1); // Remove item if quantity is 1
-      
-      this.addedItemToCart = false;
+      const cartProduct = this.cartItems[index]
+      const matchingProduct = this.products.find(product => 
+      product.id === cartProduct.id);
+      if (matchingProduct){
+        matchingProduct.quantity = 1;
+      }
+      if (this.cartItems[index]) {
+        this.cartItems[index].quantity = 1;
+      }
+      this.cartItems.splice(index, 1); // Remove item if quantity is 1
+      this.addedItemToCart = true;
+      this.quantity = 1;
     },
     increment(product) {
       const cartItem = this.cartItems.find(
@@ -174,6 +192,7 @@ export default {
       );
       if (cartItem) {
         cartItem.quantity += 1; // Increment the quantity
+        product.quantity += 1;
       }
       console.log(cartItem); // This logs the cart item after updating its quantity
     },
@@ -182,12 +201,16 @@ export default {
       const cartItem = this.cartItems.find(
         (item) => item.name === product.name
       );
+      const index = this.cartItems.findIndex(item=>item.id ===  product.id)
       if (cartItem && cartItem.quantity > 1) {
-        cartItem.quantity -= 1; // Decrement the quantity, but don't let it go below 1
-      }else{
-        this.addedItemToCart = false;
+        cartItem.quantity -= 1;
+        product.quantity -= 1;
+      } else {
+        product.quantity = 1
+        this.removeFromCart(index)
       }
     },
+
     isInCart(product) {
       return this.cartItems.some((item) => item.name === product.name);
     },
@@ -230,12 +253,11 @@ export default {
     display: flex;
     width: 100%;
     flex-direction: column; /* Switch to column layout on small screens */
-    
   }
   .products-grid {
-    margin-left:0px;
-    max-width:100%;
-    padding:5px;
+    margin-left: 0px;
+    max-width: 100%;
+    padding: 5px;
   }
   h2 {
     font-size: 30px;

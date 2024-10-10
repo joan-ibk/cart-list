@@ -1,5 +1,5 @@
 <template>
-    <div :class="['cart', { expanded: cartItems.length > 0 }]">
+    <div :class="['cart', { expanded: cartItems.length  > 0 }]">
       <!-- Apply 'expanded' class if cart has items -->
       <div class="cart-flex">
         <h2>Your Cart  ({{ totalQuantity }})</h2>
@@ -277,7 +277,13 @@
     border-radius: 10px;
     /* width: 350px; */
   }
-  
+  body.modal-open {
+    /* block scroll for mobile; */
+    /* causes underlying page to jump to top; */
+    /* prevents scrolling on all screens */
+    overflow: hidden;
+    position: fixed;
+}
   .modal-header {
     display: flex;
     justify-content: space-between;

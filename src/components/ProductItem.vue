@@ -8,7 +8,7 @@
         />
         <div class="btnn" v-if="addedToCart">
           <button class="minus-btn" @click="decrement">-</button>
-          <p class="number">{{ quantity }}</p>
+          <p class="number">{{ product.quantity }}</p>
   
           <button class="plus-btn" @click="increment">+</button>
         </div>
@@ -47,12 +47,13 @@
         required: true,
         default: false,
       },
+      quantity: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
     },
-    data() {
-      return {
-        quantity: 1, // Initialize quantity here
-      };
-    },
+    
     methods: {
       showImage(product) {
         console.log(product);
@@ -62,13 +63,10 @@
       },
       increment() {
         this.$emit("increment", this.product);
-        this.quantity++;
+        // this.quantity++;
       },
       decrement() {
-        if (this.quantity > 0) {
-          this.$emit("decrement", this.product);
-          this.quantity--;
-        }
+        this.$emit("decrement", this.product);
       },
     },
   };
